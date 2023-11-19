@@ -2,13 +2,13 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
 const birdImage = new Image();
-birdImage.src = './img/flappybird.png';
+birdImage.src = './img/plane.png';
 
 const topPipeImage = new Image();
-topPipeImage.src = './img/tallBuilding.png';
+topPipeImage.src = './img/tallBuildingTop.png';
 
 const bottomPipeImage = new Image();
-bottomPipeImage.src = './img/tallBuilding.png';
+bottomPipeImage.src = './img/tallBuildingBottom.png';
 
 const bird = {
   radius: 20,
@@ -18,7 +18,7 @@ const bird = {
 };
 
 const pipeGap = 150;
-const pipeWidth = 50;
+const pipeWidth = 100;
 let pipes = [];
 let score = 0;
 let frames = 0;
