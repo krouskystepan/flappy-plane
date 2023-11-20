@@ -11,13 +11,13 @@ const bottomPipeImage = new Image();
 bottomPipeImage.src = './img/tallBuildingBottom.png';
 
 const bird = {
-  radius: 20,
+  radius: 25,
   velocity: 0,
   gravity: 0.6,
   jump: -9, // Adjust jump force
 };
 
-const pipeGap = 150;
+const pipeGap = 200;
 const pipeWidth = 100;
 let pipes = [];
 let score = 0;
