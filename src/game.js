@@ -14,10 +14,10 @@ const bird = {
   radius: 25,
   velocity: 0,
   gravity: 0.6,
-  jump: -9, // Adjust jump force
+  jump: -9,
 };
 
-const pipeGap = 200;
+const pipeGap = 150;
 const pipeWidth = 100;
 let pipes = [];
 let score = 0;
@@ -29,7 +29,6 @@ function resizeCanvas() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
-  // Reposition the bird based on different width and height breakpoints
   if (canvas.width < 500 && canvas.height < 700) {
     bird.x = canvas.width / 2;
     bird.y = canvas.height / 2;
@@ -41,9 +40,8 @@ function resizeCanvas() {
     bird.y = canvas.height / 2;
   }
 
-  // Recalculate the position of the "Game Over" text on window resize
   if (!gameActive) {
-    const maxWidth = canvas.width * 0.8; // Set a maximum width for the text
+    const maxWidth = canvas.width * 0.8;
     const text = 'Game Over. Press Space to Restart';
     ctx.font = '40px Arial';
     ctx.fillStyle = '#000';
@@ -67,7 +65,7 @@ function resizeCanvas() {
     }
     lines.push(line);
 
-    const lineHeight = 40; // Approximate font size height
+    const lineHeight = 40;
     const textX = canvas.width / 2;
     const textY = canvas.height / 2 - (lineHeight * lines.length) / 2;
 
@@ -78,10 +76,8 @@ function resizeCanvas() {
   }
 }
 
-// Initial canvas size setup
 resizeCanvas();
 
-// Function to handle entering fullscreen
 function enterFullscreen() {
   if (canvas.requestFullscreen) {
     canvas.requestFullscreen();
@@ -101,16 +97,18 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-// Adjust canvas size on window resize
 window.addEventListener('resize', resizeCanvas);
 
 function gameLoop() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+  const backgroundImage = new Image();
+  backgroundImage.src = './img/background.jpg';
+  ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+
   bird.velocity += bird.gravity;
   bird.y += bird.velocity;
 
-  // Drawing bird image
   ctx.drawImage(
     birdImage,
     bird.x - bird.radius,
@@ -138,7 +136,6 @@ function gameLoop() {
   for (let i = 0; i < pipes.length; i++) {
     const p = pipes[i];
 
-    // Draw upper pipe (using topPipeImage)
     ctx.drawImage(
       topPipeImage,
       p.x,
@@ -147,7 +144,6 @@ function gameLoop() {
       topPipeImage.height
     );
 
-    // Draw lower pipe (using bottomPipeImage)
     ctx.drawImage(
       bottomPipeImage,
       p.x,
@@ -169,8 +165,8 @@ function gameLoop() {
 
     // Check if the bird passes between pipes
     if (bird.x > p.x && bird.x < p.x + pipeWidth && !p.passed) {
-      score++; // Increase score
-      p.passed = true; // Set passed flag to true to prevent multiple increments for the same pipe
+      score++;
+      p.passed = true;
     }
 
     if (p.x + pipeWidth <= 0) {
@@ -215,24 +211,23 @@ document.addEventListener('keydown', handleKeyPress);
 
 function resetGame() {
   bird.y = canvas.height / 2;
-  bird.velocity = 0; // Reset bird's velocity
+  bird.velocity = 0;
   pipes = [];
   score = 0;
   frames = 0;
   gameActive = true;
 
-  document.addEventListener('keydown', handleKeyPress); // Re-add the event listener immediately
+  document.addEventListener('keydown', handleKeyPress);
 }
 
 function gameOver() {
-  const maxWidth = canvas.width * 0.8; // Set a maximum width for the text
-  const gameOverText = 'Game Over. Press Space to Restart';
+  const maxWidth = canvas.width * 0.8;
+  const victoryText = 'Game Over. Press Space to Restart';
   const scoreText = `Score: ${score}`;
   ctx.font = '40px Arial';
   ctx.fillStyle = '#000';
   ctx.textAlign = 'center';
 
-  // Function to wrap text into multiple lines
   function wrapText(text, x, y, maxWidth, lineHeight) {
     let words = text.split(' ');
     let line = '';
@@ -257,24 +252,19 @@ function gameOver() {
     }
   }
 
-  // Calculate the position for the "Game Over" text
-  const gameOverX = canvas.width / 2;
-  const gameOverY = canvas.height / 2 - 40; // Center vertically
-  const lineHeight = 50; // Line height for text
+  const victoryX = canvas.width / 2;
+  const victoryY = canvas.height / 2 - 40;
+  const lineHeight = 50;
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  wrapText(victoryText, victoryX, victoryY, maxWidth, lineHeight);
 
-  // Wrap and draw "Game Over" text
-  wrapText(gameOverText, gameOverX, gameOverY, maxWidth, lineHeight);
-
-  // Calculate the position for the score text
   const scoreX = canvas.width / 2;
-  const scoreY = gameOverY + lineHeight * 2; // Place below "Game Over" text
+  const scoreY = victoryY + lineHeight * 2;
 
-  // Draw the score text below the "Game Over" text
   ctx.fillText(scoreText, scoreX, scoreY);
 
-  gameActive = false; // Set game state to inactive
+  gameActive = false;
 }
 
 gameLoop();
