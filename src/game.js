@@ -1,6 +1,9 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
+const backgroundImage = new Image();
+backgroundImage.src = './img/background.jpg';
+
 const birdImage = new Image();
 birdImage.src = './img/plane.png';
 
@@ -24,6 +27,7 @@ let score = 0;
 let frames = 0;
 
 let gameActive = true;
+let restarting = false;
 
 function resizeCanvas() {
   canvas.width = window.innerWidth;
@@ -102,8 +106,6 @@ window.addEventListener('resize', resizeCanvas);
 function gameLoop() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  const backgroundImage = new Image();
-  backgroundImage.src = './img/background.jpg';
   ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
 
   bird.velocity += bird.gravity;
@@ -199,10 +201,13 @@ function handleKeyPress(e) {
   if (e.code === 'Space') {
     if (gameActive) {
       bird.velocity = bird.jump;
-    } else {
-      // Restart the game
-      resetGame();
-      gameLoop();
+    } else if (!restarting) {
+      restarting = true;
+      setTimeout(() => {
+        restarting = false;
+        resetGame();
+        gameLoop();
+      }, 500);
     }
   }
 }
