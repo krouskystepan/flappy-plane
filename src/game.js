@@ -94,7 +94,7 @@ function enterFullscreen() {
   }
 }
 
-// Listen for a specific key press (e.g., 'F' for fullscreen)
+// Listen for a specific key press ('F' for fullscreen)
 document.addEventListener('keydown', (e) => {
   if (e.code === 'KeyF') {
     enterFullscreen();
